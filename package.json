@@ -1,0 +1,28 @@
+{
+  "name": "space-io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duongban/space-io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duongban/space-io/issues"
+  },
+  "homepage": "https://github.com/duongban/space-io#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "webpack": "^4.41.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3"
+  }
+}
