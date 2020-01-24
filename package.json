@@ -22,9 +22,12 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "throttle-debounce": "^2.1.0",
-    "webpack": "^4.41.5"
+    "webpack": "^4.41.5",
+    "webpack-dev-middleware": "^3.7.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3"
+    "@babel/core": "^7.8.3",
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^4.2.2"
   }
 }
