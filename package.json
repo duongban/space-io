@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/duongban/space-io#readme",
   "dependencies": {
+    "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
