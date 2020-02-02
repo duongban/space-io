@@ -1,9 +1,9 @@
 import { downloadAssets, getAsset } from './assets';
-import { getMe, getOtherPlayers } from './state';
+import { getMe, getOtherPlayers, getBullets } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_RADIUS, BULLET_RADIUS, MAP_SIZE } = Constants;
 
 // Setup the canvas and get the graphics context
 const canvas = document.getElementById('game-canvas');
@@ -20,7 +20,7 @@ function render() {
   const backgroundGradient = context.createRadialGradient(
     backgroundX,
     backgroundY,
-    100,
+    MAP_SIZE / 10,
     backgroundX,
     backgroundY,
     MAP_SIZE / 2,
@@ -30,25 +30,44 @@ function render() {
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Draw boundaries
+  context.strokeStyle = 'black';
+  context.lineWidth = 1;
+  context.strokeRect(backgroundX - MAP_SIZE / 2, backgroundY - MAP_SIZE / 2, MAP_SIZE, MAP_SIZE);
+
   // Draw all players
   renderPlayer(me, me);
   getOtherPlayers().forEach(renderPlayer.bind(null, me));
+
+  // Draw all bullets
+  getBullets().forEach(renderBullet.bind(null, me));
 }
 
 // Renders a ship at the given coordinates
 function renderPlayer(me, player) {
   const { x, y, direction } = player;
   context.save();
-  context.translate(canvas.width / 2, canvas.height / 2);
+  context.translate(canvas.width / 2 + x - me.x, canvas.height / 2 + y - me.y);
   context.rotate(direction);
   context.drawImage(
     getAsset('ship.svg'),
-    x - PLAYER_RADIUS - me.x,
-    y - PLAYER_RADIUS - me.y,
+    -PLAYER_RADIUS,
+    -PLAYER_RADIUS,
     PLAYER_RADIUS * 2,
     PLAYER_RADIUS * 2,
   );
   context.restore();
+}
+
+function renderBullet(me, bullet) {
+  const { x, y } = bullet;
+  context.drawImage(
+    getAsset('bullet.svg'),
+    canvas.width / 2 + x - me.x - BULLET_RADIUS,
+    canvas.height / 2 + y - me.y - BULLET_RADIUS,
+    BULLET_RADIUS * 2,
+    BULLET_RADIUS * 2,
+  );
 }
 
 export default function startRendering() {
