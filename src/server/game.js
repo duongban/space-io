@@ -5,6 +5,7 @@ class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
+    this.bullets = [];
     this.lastUpdateTime = Date.now();
     setInterval(this.update.bind(this), 1000 / 60);
   }
@@ -24,7 +25,9 @@ class Game {
   }
 
   handleInput(socket, dir) {
-    this.players[socket.id].setDirection(dir);
+    if (this.players[socket.id]) {
+      this.players[socket.id].setDirection(dir);
+    }
   }
 
   update() {
@@ -33,11 +36,24 @@ class Game {
     const dt = (now - this.lastUpdateTime) / 1000;
     this.lastUpdateTime = now;
 
+    // Update each bullet
+    const bulletsToRemove = [];
+    this.bullets.forEach(bullet => {
+      if (bullet.update(dt)) {
+        // Destroy this bullet
+        bulletsToRemove.push(bullet);
+      }
+    });
+    this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
-      player.update(dt);
+      const newBullet = player.update(dt);
+      if (newBullet) {
+        this.bullets.push(newBullet);
+      }
       socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
     });
   }
