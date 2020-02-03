@@ -1,5 +1,6 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
+const applyCollisions = require('./collisions');
 
 class Game {
   constructor() {
@@ -7,6 +8,7 @@ class Game {
     this.players = {};
     this.bullets = [];
     this.lastUpdateTime = Date.now();
+    this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
   }
 
@@ -16,7 +18,7 @@ class Game {
     // Generate a position to start this player at.
     const x = Constants.MAP_SIZE / 2;
     const y = Constants.MAP_SIZE / 2;
-    this.players[socket.id] = new Player(username, x, y);
+    this.players[socket.id] = new Player(socket.id, username, x, y);
   }
 
   removePlayer(socket) {
@@ -54,17 +56,37 @@ class Game {
       if (newBullet) {
         this.bullets.push(newBullet);
       }
-      socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
     });
+
+    // Apply collisions
+    const destroyedBullets = applyCollisions(Object.values(this.players), this.bullets);
+    this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
+
+    // Send a game update to each player every other time
+    if (this.shouldSendUpdate) {
+      Object.keys(this.sockets).forEach(playerID => {
+        const socket = this.sockets[playerID];
+        const player = this.players[playerID];
+        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
+      });
+      this.shouldSendUpdate = false;
+    } else {
+      this.shouldSendUpdate = true;
+    }
   }
 
   createUpdate(player) {
     const nearbyPlayers = Object.values(this.players).filter(p => (
       p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2
     ));
+    const nearbyBullets = this.bullets.filter(b => (
+      b.distanceTo(player) <= Constants.MAP_SIZE / 2
+    ));
+
     return {
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
+      bullets: nearbyBullets.map(b => b.serializeForUpdate()),
     };
   }
 }
