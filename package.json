@@ -4,9 +4,10 @@
   "description": "",
   "main": "src/server/server.js",
   "scripts": {
+    "build": "webpack --config webpack.prod.js",
     "lint": "eslint --cache --ext .js,.jsx src/",
-    "start": "node src/server/server.js",
-    "build": "webpack --config webpack.dev.config.js"
+    "develop": "NODE_ENV=development node src/server/server.js",
+    "start": "NODE_ENV=production node src/server/server.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
     "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "webpack-cli": "^3.3.10",
     "webpack-merge": "^4.2.2"
   }
