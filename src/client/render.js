@@ -6,16 +6,20 @@ const Constants = require('../shared/constants');
 
 const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE } = Constants;
 
-// Setup the canvas and get the graphics context
+// Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 const context = canvas.getContext('2d');
+setCanvasDimensions();
 
-window.addEventListener('resize', debounce(40, () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}));
+function setCanvasDimensions() {
+  // On small screens (e.g. phones), we want to "zoom out" so players can still see at least
+  // 800 in-game units of width.
+  const scaleRatio = Math.max(1, 800 / window.innerWidth);
+  canvas.width = scaleRatio * window.innerWidth;
+  canvas.height = scaleRatio * window.innerHeight;
+}
+
+window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
   const { me, others, bullets } = getCurrentState();
@@ -24,8 +28,24 @@ function render() {
   }
 
   // Draw background
-  const backgroundX = MAP_SIZE / 2 - me.x + canvas.width / 2;
-  const backgroundY = MAP_SIZE / 2 - me.y + canvas.height / 2;
+  renderBackground(me.x, me.y);
+
+  // Draw boundaries
+  context.strokeStyle = 'black';
+  context.lineWidth = 1;
+  context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
+
+  // Draw all bullets
+  bullets.forEach(renderBullet.bind(null, me));
+
+  // Draw all players
+  renderPlayer(me, me);
+  others.forEach(renderPlayer.bind(null, me));
+}
+
+function renderBackground(x, y) {
+  const backgroundX = MAP_SIZE / 2 - x + canvas.width / 2;
+  const backgroundY = MAP_SIZE / 2 - y + canvas.height / 2;
   const backgroundGradient = context.createRadialGradient(
     backgroundX,
     backgroundY,
@@ -38,18 +58,6 @@ function render() {
   backgroundGradient.addColorStop(1, 'gray');
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Draw boundaries
-  context.strokeStyle = 'black';
-  context.lineWidth = 1;
-  context.strokeRect(backgroundX - MAP_SIZE / 2, backgroundY - MAP_SIZE / 2, MAP_SIZE, MAP_SIZE);
-
-  // Draw all bullets
-  bullets.forEach(renderBullet.bind(null, me));
-
-  // Draw all players
-  renderPlayer(me, me);
-  others.forEach(renderPlayer.bind(null, me));
 }
 
 // Renders a ship at the given coordinates
@@ -99,15 +107,23 @@ function renderBullet(me, bullet) {
   );
 }
 
-let renderInterval = null;
+function renderMainMenu() {
+  const t = Date.now() / 7500;
+  const x = MAP_SIZE / 2 + 800 * Math.cos(t);
+  const y = MAP_SIZE / 2 + 800 * Math.sin(t);
+  renderBackground(x, y);
+}
 
+let renderInterval = setInterval(renderMainMenu, 1000 / 60);
+
+// Replaces main menu rendering with game rendering.
 export function startRendering() {
-  // Render at 60 FPS
+  clearInterval(renderInterval);
   renderInterval = setInterval(render, 1000 / 60);
 }
 
+// Replaces game rendering with main menu rendering.
 export function stopRendering() {
   clearInterval(renderInterval);
-  context.fillStyle = 'black';
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  renderInterval = setInterval(renderMainMenu, 1000 / 60);
 }
