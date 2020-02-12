@@ -16,8 +16,8 @@ class Game {
     this.sockets[socket.id] = socket;
 
     // Generate a position to start this player at.
-    const x = Constants.MAP_SIZE / 2;
-    const y = Constants.MAP_SIZE / 2;
+    const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
+    const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     this.players[socket.id] = new Player(socket.id, username, x, y);
   }
 
@@ -91,8 +91,8 @@ class Game {
   }
 
   getLeaderboard() {
-    const sortedPlayers = Object.values(this.players).sort((p1, p2) => p2.score - p1.score);
-    return sortedPlayers
+    return Object.values(this.players)
+      .sort((p1, p2) => p2.score - p1.score)
       .slice(0, 5)
       .map(p => ({ username: p.username, score: Math.round(p.score) }));
   }
@@ -101,7 +101,9 @@ class Game {
     const nearbyPlayers = Object.values(this.players).filter(
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
-    const nearbyBullets = this.bullets.filter(b => b.distanceTo(player) <= Constants.MAP_SIZE / 2);
+    const nearbyBullets = this.bullets.filter(
+      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
 
     return {
       t: Date.now(),
