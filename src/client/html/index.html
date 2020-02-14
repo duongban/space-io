@@ -4,22 +4,102 @@
 <head>
   <title>io game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link type="text/css" rel="stylesheet" href="../../../dist/game.bundle.css"></script>
+  <meta property="og:image" content="/assets/icon1200.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58664433-3"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'UA-58664433-3');
   </script>
 </head>
+
 <body>
   <canvas id="game-canvas"></canvas>
-  <script async src="../../../dist/game.bundle.js"></script>
-  <div id="play-menu" class="hidden">
-    <input type="text" id="username-input" placeholder="Username" />
-    <button id="play-button">PLAY</button>
+  <div id="play-menu" class="hidden" style="background-color: #f5f5dc00;">
+    <h1 style="color: #38d878; font-family: 'Times New Roman', Times, serif;">SPACE.io Game</h1>
+    <!--<p>
+      Stay alive and shoot other players.
+      <br /> Use your mouse to move.
+    </p>
+    <hr />
+    <p>
+       <br />
+      Read the tutorial:
+      <a href="https://victorzhou.com/blog/build-an-io-game-part-1/" target="_blank">How to Build an .io Game</a>.
+      <br /> See the source code on
+      <a href="https://github.com/vzhou842/example-.io-game" target="_blank">Github</a>.
+      <br /> Created by
+      <a href="https://victorzhou.com">Victor Zhou</a>.
+    </p>-->
+    <hr />
+    <div class="form-group">
+      <label for="sel1" style="color: white;">Ship Type:</label>
+      <div id="shiptype" class="carousel slide" data-ride="carousel" data-interval="false">
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+
+          <div class="item active" value="spritesheet.png">
+            <img src="assets/ship_red.png" alt="Los Angeles" style="width:100%;">
+            <div class="carousel-caption">
+              <!--<h3>Los Angeles</h3>-->
+            </div>
+          </div>
+
+          <div class="item" value="spritesheet2.png">
+            <img src="assets/ship_blue.png" alt="Chicago" style="width:100%;">
+            <div class="carousel-caption">
+              <!--<h3>Chicago</h3>-->
+            </div>
+          </div>
+
+          <div class="item" value="spritesheet3.png">
+            <img src="assets/ship_yellow.png" alt="New York" style="width:100%;">
+            <div class="carousel-caption">
+              <!--<h3>New York</h3>-->
+            </div>
+          </div>
+
+          <div class="item" value="spritesheet4.png">
+            <img src="assets/ship_green.png" alt="New York" style="width:100%;">
+            <div class="carousel-caption">
+              <!--<h3>New York</h3>-->
+            </div>
+          </div>
+
+          <div class="item" value="spritesheet5.png">
+            <img src="assets/ship_purple.png" alt="New York" style="width:100%;">
+            <div class="carousel-caption">
+              <!--<h3>New York</h3>-->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#shiptype" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#shiptype" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+      <!--<select class="form-control" id="shiptype">
+        <option value="spritesheet.png">1</option>
+        <option value="spritesheet2.png">2</option>
+        <option value="spritesheet3.png">3</option>
+        <option value="spritesheet4.png">4</option>
+        <option value="spritesheet5.png">5</option>
+      </select>-->
+    </div>
+    <input type="text" id="username-input" placeholder="Username" style="border-radius: 25px; background-color: #694ca2d4; color: #cdd4d1;"/>
+    <button id="play-button" style="border-radius: 25px;">PLAY</button>
   </div>
   <div id="leaderboard" class="hidden">
     <table>
@@ -27,11 +107,26 @@
         <th>Username</th>
         <th>Score</th>
       </tr>
-      <tr><td></td><td></td></tr>
-      <tr><td></td><td></td></tr>
-      <tr><td></td><td></td></tr>
-      <tr><td></td><td></td></tr>
-      <tr><td></td><td></td></tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
     </table>
   </div>
   <div id="disconnect-modal" class="hidden">

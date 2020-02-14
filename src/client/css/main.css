@@ -11,18 +11,18 @@ hr {
 }
 
 button {
-  font-size: 18px;
+  font-size: 20px;
   outline: none;
   border: none;
-  color: black;
-  background-color: transparent;
+  color: #e8e8e8;
+  background-color: #53a273;
   padding: 5px 20px;
   border-radius: 3px;
   transition: background-color 0.2s ease;
 }
 
 button:hover {
-  background-color: rgb(230, 230, 230);
+  background-color: #70d69a;
 }
 
 button:focus {
