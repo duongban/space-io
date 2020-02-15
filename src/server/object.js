@@ -5,11 +5,14 @@ class Object {
     this.y = y;
     this.direction = dir;
     this.speed = speed;
+    this.isRunning = true;
   }
 
   update(dt) {
-    this.x += dt * this.speed * Math.sin(this.direction);
-    this.y -= dt * this.speed * Math.cos(this.direction);
+    if(this.isRunning){
+      this.x += dt * this.speed * Math.sin(this.direction);
+      this.y -= dt * this.speed * Math.cos(this.direction);
+    }
   }
 
   distanceTo(object) {
