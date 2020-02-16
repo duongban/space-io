@@ -18,6 +18,7 @@ export function processGameUpdate(update) {
     firstServerTimestamp = update.t;
     gameStart = Date.now();
   }
+
   gameUpdates.push(update);
 
   updateLeaderboard(update.leaderboard);
@@ -66,6 +67,12 @@ export function getCurrentState() {
       me: interpolateObject(baseUpdate.me, next.me, ratio),
       others: interpolateObjectArray(baseUpdate.others, next.others, ratio),
       bullets: interpolateObjectArray(baseUpdate.bullets, next.bullets, ratio),
+      heathitems: interpolateObjectArray(baseUpdate.heathitems, next.heathitems, ratio),
+      gunitems: interpolateObjectArray(baseUpdate.gunitems, next.gunitems, ratio),
+      sparklings: interpolateObjectArray(baseUpdate.sparklings, next.sparklings, ratio),
+      explosions: interpolateObjectArray(baseUpdate.explosions, next.explosions, ratio),
+      planets: interpolateObjectArray(baseUpdate.planets, next.planets, ratio),
+      bombs: interpolateObjectArray(baseUpdate.bombs, next.bombs, ratio),
     };
   }
 }
