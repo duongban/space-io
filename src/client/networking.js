@@ -1,11 +1,11 @@
 import io from 'socket.io-client';
 import { throttle } from 'throttle-debounce';
 import { processGameUpdate } from './state';
+import { send } from 'q';
 
 const Constants = require('../shared/constants');
 
-const socketProtocol = (window.location.protocol === 'https') ? 'wss' : 'ws';
-const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
+const socket = io(`ws://${window.location.host}`, { reconnection: false });
 const connectedPromise = new Promise(resolve => {
   socket.on('connect', () => {
     console.log('Connected to server!');
@@ -28,10 +28,19 @@ export const connect = onGameOver => (
   })
 );
 
-export const play = username => {
-  socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
+export const play = (username, shiptype) => {
+  socket.emit(Constants.MSG_TYPES.JOIN_GAME, {UserName: username, ShipType: shiptype});
 };
 
 export const updateDirection = throttle(20, dir => {
   socket.emit(Constants.MSG_TYPES.INPUT, dir);
+});
+
+export const updateMousePos = throttle(20, dis => {
+  socket.emit(Constants.MSG_TYPES.MOUSEPOS, dis);
+});
+
+export const updateSpeedUp = throttle(20, () => {
+  console.log("send message!");
+  socket.emit(Constants.MSG_TYPES.INPUT_MOUSE_LEFT_CLICK);
 });
