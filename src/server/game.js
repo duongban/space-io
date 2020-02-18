@@ -114,6 +114,43 @@ class Game {
     });
     this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
 
+    const SparklingToRemove = [];
+    this.sparklings.forEach(sparkling => {
+      if (sparkling.update(dt)) {
+        // Destroy this sparkling
+        SparklingToRemove.push(sparkling);
+      }
+    });
+    this.sparklings = this.sparklings.filter(sparkling => !SparklingToRemove.includes(sparkling));
+
+    const ExplosionToRemove = [];
+    this.explosions.forEach(Explosion => {
+      if (Explosion.update(dt)) {
+        // Destroy this sparkling
+        ExplosionToRemove.push(Explosion);
+      }
+    });
+    this.explosions = this.explosions.filter(Explosion => !ExplosionToRemove.includes(Explosion));
+
+    const bombToRemove = [];
+    this.bombs.forEach(bomb => {
+      if (bomb.update(dt)) {
+        // Destroy this sparkling
+        bombToRemove.push(bomb);
+      }
+    });
+    this.bombs = this.bombs.filter(bomb => !bombToRemove.includes(bomb));
+
+    //update planet
+    //const PlanetToRemove = [];
+    this.planets.forEach(planet => {
+      if (planet.update(dt)) {
+        // Destroy this sparkling
+        //ExplosionToRemove.push(Explosion);
+      }
+    });
+    //this.explosions = this.explosions.filter(Explosion => !ExplosionToRemove.includes(Explosion));
+
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
@@ -133,6 +170,7 @@ class Game {
     destroyedBullets.forEach(b => {
       if (this.players[b.parentID]) {
         this.players[b.parentID].onDealtDamage();
+        this.sparklings.push(new Sparkling(b.x, b.y, 0));
       }
     });
     this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
