@@ -47,4 +47,30 @@ module.exports = Object.freeze({
     GAME_OVER: 'dead',
     INPUT_MOUSE_LEFT_CLICK: 'mouseleftclick',
   },
+
+  ID_BOTS: [
+    BOT_ONE = 0,
+    BOT_TWO = 1,
+    BOT_THREE = 2,
+    BOT_FOUR = 3,
+    BOT_FINE = 4,
+  ],
+
+  NAME_BOTS: [
+    BOT_ONE = 'bot_1',
+    BOT_TWO = 'bot_2',
+    BOT_THREE = 'bot_3',
+    BOT_FOUR = 'bot_4',
+    BOT_FINE = 'bot_5',
+  ],
+
+  SHIP_BOTS: [
+    BOT_ONE = 'spritesheet.png',
+    BOT_TWO = 'spritesheet2.png',
+    BOT_THREE = 'spritesheet3.png',
+    BOT_FOUR = 'spritesheet4.png',
+    BOT_FINE = 'spritesheet5.png',
+  ],
+
+  AMOUNT_OF_BOTS: 5,
 });
