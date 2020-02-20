@@ -1,6 +1,6 @@
 # space-io
 # Build
 npm install
-npm build
+npm run build
 # Run 
-npm start
+npm run start
