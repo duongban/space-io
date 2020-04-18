@@ -46,6 +46,7 @@ module.exports = Object.freeze({
     MOUSEPOS: 'mousepos',
     GAME_OVER: 'dead',
     INPUT_MOUSE_LEFT_CLICK: 'mouseleftclick',
+    DUPLICATE_USERNAME: 'duplicate_username',
   },
 
   ID_BOTS: [

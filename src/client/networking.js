@@ -25,11 +25,18 @@ export const connect = onGameOver => (
         window.location.reload();
       };
     });
+    socket.on(Constants.MSG_TYPES.DUPLICATE_USERNAME, () => {
+      console.log("Duplicate");
+      document.getElementById('duplicate-modal').classList.remove('hidden');
+      document.getElementById('duplicate-reconnect-button').onclick = () => {
+        window.location.reload();
+      };
+    });
   })
 );
 
 export const play = (username, shiptype) => {
-  socket.emit(Constants.MSG_TYPES.JOIN_GAME, {UserName: username, ShipType: shiptype});
+  socket.emit(Constants.MSG_TYPES.JOIN_GAME, { UserName: username, ShipType: shiptype });
 };
 
 export const updateDirection = throttle(20, dir => {

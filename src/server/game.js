@@ -34,6 +34,7 @@ class Game {
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     this.randomBomb = 13000;
+    this.hasBots = false;
     setInterval(this.update.bind(this), 1000 / 60);
     setInterval(this.addBombRandom.bind(this), this.randomBomb);
 
@@ -67,6 +68,13 @@ class Game {
   }
 
   addPlayer(socket, data) {
+    for (var id in this.players) {
+      if (this.players[id].username.localeCompare(data.UserName) == 0) {
+        console.log("Match");
+        socket.emit(Constants.MSG_TYPES.DUPLICATE_USERNAME);
+        return;
+      }
+    }
     this.sockets[socket.id] = socket;
 
     // Generate a position to start this player at.
@@ -89,14 +97,18 @@ class Game {
   }
 
   addBots() {
-    var count = 0;
-    // while (Object.keys(this.players).length < Constants.AMOUNT_OF_BOTS) {
-    while (count < Constants.AMOUNT_OF_BOTS) {
-      var socket = require('socket.io-client')('http://localhost');
-      socket.id = Constants.ID_BOTS[count];
-      const data = { UserName: Constants.NAME_BOTS[count], ShipType: Constants.SHIP_BOTS[socket.id] };
-      this.addBot(socket, data);
-      count++;
+    if (!this.hasBots) {
+      console.log("Add bots");
+      var count = 0;
+      // while (Object.keys(this.players).length < Constants.AMOUNT_OF_BOTS) {
+      while (count < Constants.AMOUNT_OF_BOTS) {
+        var socket = require('socket.io-client')('http://localhost');
+        socket.id = Constants.ID_BOTS[count];
+        const data = { UserName: Constants.NAME_BOTS[count], ShipType: Constants.SHIP_BOTS[socket.id] };
+        this.addBot(socket, data);
+        count++;
+      }
+      this.hasBots = true;
     }
   }
 

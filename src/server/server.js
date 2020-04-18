@@ -43,6 +43,7 @@ io.on('connection', socket => {
 const game = new Game();
 
 function joinGame(data) {
+  console.log(data);
   game.addPlayer(this, data);
   game.addBots();
 }
